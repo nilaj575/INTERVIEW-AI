@@ -52,8 +52,12 @@ export const useAuth = () => {
             try {
 
                 const data = await getMe()
-                setUser(data.user)
-            } catch (err) { } finally {
+                if (data && data.user) {
+                setUser(data.user);
+            }
+            } catch (err) { 
+                console.log(err);
+            } finally {
                 setLoading(false)
             }
         }

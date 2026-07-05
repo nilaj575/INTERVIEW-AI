@@ -60,7 +60,11 @@ export async function getMe() {
         return response.data
 
     } catch (err) {
+        if (err.response?.status === 401) {
+            return null;
+        }
         console.log(err)
+         return null;
     }
 
 }
