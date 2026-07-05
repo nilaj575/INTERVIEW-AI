@@ -1,29 +1,39 @@
-const express=require("express");
-const app=express()
-const cookieParser=require("cookie-parser");
+const express = require("express");
+const app = express();
 
-const cors=require("cors");
+const cookieParser = require("cookie-parser");
+const cors = require("cors");
 
-app.use(cors({
-    origin:"http://localhost:5173/",
-    credentials:true
-}));
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://interview-ai-nilaj.vercel.app",
+];
+
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true,
+  })
+);
+
 app.use(express.json());
-
 app.use(cookieParser());
-
-
 app.use(express.urlencoded({ extended: true }));
 
-const authrouter=require("./routes/auth.routes");
-const interViewRouter=require("./routes/interview.routes")
-
+const authrouter = require("./routes/auth.routes");
+const interViewRouter = require("./routes/interview.routes");
 
 app.get("/", (req, res) => {
-    res.send("Hello, World!");
+  res.send("Hello, World!");
 });
 
 app.use("/api/auth", authrouter);
-app.use("/api/interview", interViewRouter)
+app.use("/api/interview", interViewRouter);
 
-module.exports=app;
+module.exports = app;
