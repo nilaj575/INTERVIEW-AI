@@ -14,7 +14,6 @@ const allowedOrigins = [
 app.use(
   cors({
     origin: function (origin, callback) {
-      // Allow requests without an Origin
       if (!origin) {
         return callback(null, true);
       }
@@ -23,7 +22,6 @@ app.use(
         return callback(null, true);
       }
 
-      // In production, allow the deployed frontend
       if (process.env.NODE_ENV === "production") {
         return callback(null, true);
       }
@@ -59,7 +57,7 @@ app.use("/api/auth", authrouter);
 app.use("/api/interview", interViewRouter);
 
 // React/Vite fallback
-app.get("/", (req, res) => {
+app.get("/{*splat}", (req, res) => {
   if (req.path.startsWith("/api/")) {
     return res.status(404).json({
       message: "API route not found",
